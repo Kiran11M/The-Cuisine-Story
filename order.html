@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#8c1c16">
+  <title>Order at Table | The Cuisine Story</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="app.css">
+</head>
+<body class="order-page">
+
+  <header class="o-header">
+    <div class="o-brand">
+      <span class="logo-mark">CS</span>
+      <div>
+        <p class="logo-text">The Cuisine Story</p>
+        <p class="o-sub">Scan · Order · Relax</p>
+      </div>
+    </div>
+    <span class="table-pill" id="tablePill" hidden></span>
+  </header>
+
+  <!-- Shown when the page is opened without a table number -->
+  <section class="table-prompt" id="tablePrompt" hidden>
+    <h1>Welcome!</h1>
+    <p>Please enter the table number printed on your table's QR card.</p>
+    <form id="tableForm" class="table-form">
+      <input id="tableInput" inputmode="numeric" maxlength="10" placeholder="Table no." required aria-label="Table number">
+      <button class="btn btn-primary" type="submit">Start ordering</button>
+    </form>
+  </section>
+
+  <main id="orderApp" hidden>
+    <div class="o-tools">
+      <input type="search" id="search" placeholder="Search dishes…" aria-label="Search dishes">
+      <label class="veg-toggle"><input type="checkbox" id="vegOnly"> <span class="veg is-veg"></span> Veg only</label>
+    </div>
+    <nav class="o-cats" id="catNav" aria-label="Menu sections"></nav>
+    <div id="menuSections"></div>
+    <p class="o-empty" id="noResults" hidden>No dishes match your search.</p>
+    <p class="note center">Prices are inclusive of taxes unless stated otherwise. Tell us about any allergies in the order note.</p>
+  </main>
+
+  <!-- Quick actions -->
+  <div class="quick-actions" id="quickActions" hidden>
+    <button type="button" id="callWaiter"><span>🙋</span>Call waiter</button>
+    <button type="button" id="askBill"><span>🧾</span>Ask for bill</button>
+    <button type="button" id="openOrders"><span>📋</span>My orders <b id="ordersBadge" hidden></b></button>
+  </div>
+
+  <!-- Cart bar -->
+  <button class="cart-bar" id="cartBar" type="button" hidden>
+    <span id="cartCount">0 items</span>
+    <span><strong id="cartTotal">₹0</strong> · View cart →</span>
+  </button>
+
+  <!-- Cart sheet -->
+  <div class="sheet-backdrop" id="cartSheet" hidden>
+    <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="cartTitle">
+      <div class="sheet-head">
+        <h2 id="cartTitle">Your order</h2>
+        <button class="icon-btn" data-close aria-label="Close">✕</button>
+      </div>
+      <div id="cartLines"></div>
+      <label class="o-field">Note for the kitchen <span class="optional">(optional)</span>
+        <textarea id="orderNote" rows="2" maxlength="300" placeholder="Less spicy, no onion, allergies…"></textarea>
+      </label>
+      <label class="o-field">Your name <span class="optional">(optional)</span>
+        <input id="orderName" maxlength="40" placeholder="So the waiter knows who ordered">
+      </label>
+      <div class="sheet-total"><span>Total</span><strong id="sheetTotal">₹0</strong></div>
+      <p class="form-error" id="orderError" role="alert"></p>
+      <button class="btn btn-primary btn-block" id="placeOrder" type="button">Place order</button>
+      <p class="small center">Your order goes straight to the kitchen. Pay at the counter or ask for the bill.</p>
+    </div>
+  </div>
+
+  <!-- Orders / status sheet -->
+  <div class="sheet-backdrop" id="ordersSheet" hidden>
+    <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="ordersTitle">
+      <div class="sheet-head">
+        <h2 id="ordersTitle">My orders</h2>
+        <button class="icon-btn" data-close aria-label="Close">✕</button>
+      </div>
+      <div id="ordersList"></div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script src="menu-data.js"></script>
+  <script src="firebase-config.js"></script>
+  <script src="api.js"></script>
+  <script src="order.js"></script>
+</body>
+</html>

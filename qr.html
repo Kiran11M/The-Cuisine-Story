@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex">
+  <title>Table QR Codes | The Cuisine Story</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="app.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+</head>
+<body class="qr-page">
+  <section class="qr-setup container">
+    <h1>Table QR codes</h1>
+    <p class="muted">Print these and place one on each table. Guests scan the code to open the menu for that table and order straight to the kitchen.</p>
+    <form id="qrForm" class="qr-form">
+      <label class="o-field">Ordering page address
+        <input id="baseUrl" required>
+      </label>
+      <div class="qr-row">
+        <label class="o-field">From table <input id="fromT" type="number" min="1" max="200" value="1"></label>
+        <label class="o-field">To table <input id="toT" type="number" min="1" max="200" value="10"></label>
+      </div>
+      <p class="qr-warn" id="warn" hidden></p>
+      <div class="qr-row">
+        <button class="btn btn-primary" type="submit">Generate</button>
+        <button class="btn btn-ghost-dark" type="button" onclick="window.print()">Print</button>
+      </div>
+    </form>
+  </section>
+
+  <section class="qr-grid" id="grid"></section>
+
+  <script>
+    const $ = id => document.getElementById(id);
+    const here = new URL("order.html", location.href);
+
+    function checkUrl(u) {
+      let msg = "";
+      try {
+        const url = new URL(u);
+        if (url.protocol === "file:") msg = "This is a file on your computer — phones can't open it. Start the order server (start-server.bat) or host the site online, then use that address.";
+        else if (["localhost", "127.0.0.1"].includes(url.hostname)) msg = "'localhost' only works on this computer. Use the WiFi address shown in the server window (e.g. http://192.168.1.20:8080/order.html).";
+      } catch { msg = "Please enter a valid web address."; }
+      $("warn").textContent = msg;
+      $("warn").hidden = !msg;
+    }
+
+    function generate() {
+      const base = $("baseUrl").value.trim();
+      checkUrl(base);
+      const from = Math.max(1, parseInt($("fromT").value, 10) || 1);
+      const to = Math.min(200, Math.max(from, parseInt($("toT").value, 10) || from));
+      const grid = $("grid");
+      grid.innerHTML = "";
+      for (let t = from; t <= to; t++) {
+        let link;
+        try { const u = new URL(base); u.searchParams.set("table", t); link = u.toString(); } catch { return; }
+        const card = document.createElement("div");
+        card.className = "qr-card";
+        card.innerHTML = `<p class="qr-brand">The Cuisine Story</p><div class="qr-code"></div>
+          <p class="qr-table">Table ${t}</p><p class="qr-hint">Scan to see the menu &amp; order</p>`;
+        grid.appendChild(card);
+        new QRCode(card.querySelector(".qr-code"), { text: link, width: 180, height: 180, correctLevel: QRCode.CorrectLevel.M });
+      }
+    }
+
+    $("qrForm").addEventListener("submit", e => { e.preventDefault(); generate(); });
+    $("baseUrl").value = here.toString();
+
+    // When served by the local order server, prefer its WiFi address so phones can reach it.
+    fetch("api/info", { cache: "no-store" }).then(r => r.ok ? r.json() : null).then(info => {
+      const lan = info && info.lanUrls && info.lanUrls[0];
+      if (lan && ["localhost", "127.0.0.1"].includes(location.hostname)) $("baseUrl").value = new URL("order.html", lan).toString();
+    }).catch(() => {}).finally(generate);
+  </script>
+</body>
+</html>

@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex">
+  <title>Kitchen Orders | The Cuisine Story</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="app.css">
+</head>
+<body class="kitchen-page">
+
+  <!-- PIN login -->
+  <section class="k-login" id="login">
+    <form class="k-login-box" id="loginForm">
+      <span class="logo-mark">CS</span>
+      <h1>Staff login</h1>
+      <p class="muted">Kitchen &amp; waiter order screen</p>
+      <input id="pin" type="password" inputmode="numeric" autocomplete="off" placeholder="Enter PIN" required aria-label="Staff PIN">
+      <p class="form-error" id="loginError" role="alert"></p>
+      <button class="btn btn-primary btn-block" type="submit">Open order screen</button>
+    </form>
+  </section>
+
+  <div id="board" hidden>
+    <header class="k-header">
+      <div class="o-brand">
+        <span class="logo-mark">CS</span>
+        <div>
+          <p class="logo-text">Live Orders</p>
+          <p class="o-sub" id="clock"></p>
+        </div>
+      </div>
+      <div class="k-stats" id="stats"></div>
+      <div class="k-controls">
+        <span class="conn" id="conn">● Live</span>
+        <button class="btn-sm" id="soundBtn" type="button">🔔 Sound on</button>
+        <button class="btn-sm" id="notifyBtn" type="button">Enable pop-ups</button>
+        <a class="btn-sm" href="qr.html" target="_blank">Table QR codes</a>
+        <button class="btn-sm" id="logoutBtn" type="button">Lock</button>
+      </div>
+    </header>
+
+    <section class="k-calls" id="calls" hidden></section>
+
+    <main class="k-columns">
+      <section class="k-col" data-col="new"><h2>New <b id="cnt-new">0</b></h2><div class="k-list" id="col-new"></div></section>
+      <section class="k-col" data-col="preparing"><h2>Preparing <b id="cnt-preparing">0</b></h2><div class="k-list" id="col-preparing"></div></section>
+      <section class="k-col" data-col="ready"><h2>Ready to serve <b id="cnt-ready">0</b></h2><div class="k-list" id="col-ready"></div></section>
+      <section class="k-col" data-col="served"><h2>Served today <b id="cnt-served">0</b></h2><div class="k-list" id="col-served"></div></section>
+    </main>
+  </div>
+
+  <script src="firebase-config.js"></script>
+  <script src="api.js"></script>
+  <script src="kitchen.js"></script>
+</body>
+</html>

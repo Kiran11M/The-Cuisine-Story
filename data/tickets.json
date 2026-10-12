@@ -1,0 +1,42 @@
+[
+    {
+        "id":  "29t95n2528",
+        "type":  "order",
+        "table":  "1",
+        "name":  "",
+        "note":  "",
+        "items":  [
+                      {
+                          "id":  "butter-naan",
+                          "name":  "Butter Naan",
+                          "price":  60,
+                          "qty":  1,
+                          "veg":  true
+                      }
+                  ],
+        "total":  60,
+        "status":  "served",
+        "createdAt":  1791778674405,
+        "updatedAt":  1791778695458
+    },
+    {
+        "id":  "e8ys7msunr",
+        "type":  "order",
+        "table":  "2",
+        "name":  "",
+        "note":  "",
+        "items":  [
+                      {
+                          "id":  "fish-chop",
+                          "name":  "Fish Chop",
+                          "price":  180,
+                          "qty":  1,
+                          "veg":  false
+                      }
+                  ],
+        "total":  180,
+        "status":  "served",
+        "createdAt":  1791778730506,
+        "updatedAt":  1791778739090
+    }
+]
